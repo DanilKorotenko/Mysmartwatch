@@ -24,7 +24,9 @@ display.drawChar(36, 0, 'E', WHITE, BLACK, 2);
 
 display.drawChar(0, 18, '1', WHITE, BLACK, 5);
 display.drawChar(26, 18, '6', WHITE, BLACK, 5);
+
 display.drawChar(52, 18, ':', WHITE, BLACK, 5);
+
 display.drawChar(78, 18, '4', WHITE, BLACK, 5);
 display.drawChar(104, 18, '5', WHITE, BLACK, 5);
 
