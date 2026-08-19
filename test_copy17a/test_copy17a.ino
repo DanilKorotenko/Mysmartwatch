@@ -1,20 +1,34 @@
-unsigned long OldestMillis;
-unsigned long NewMillis;
-const int buttonPin = 2;  // Pin connected to button
-int buttonState = 0;      // Variable to store button state
-int ButtonPressed = 0
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <TimeLib.h>
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
+unsigned long OldestMillis;
+unsigned long NewMillis;
+const int buttonPin = 2;  // Pin connected to button
+int buttonState = 0;      // Variable to store button state
+int ButtonPressed = 0;
+
+void displayChrono()
+{
+  display.clearDisplay();
+
+  String title = "STOPWATCH";
+
+    display.setTextColor(WHITE);
+
+  display.setTextSize(2);
+  display.setCursor(0,0);
+  display.print(title);
+
+  display.display();
+}
 
 void displayTime()
 {
   display.clearDisplay();
 
-    // Variables for each line of text/numbers
     String title = "TIME";
 
     int Hours = hour();
@@ -72,10 +86,6 @@ void loop()
 {
   
 }
-  if (ButtonPressed = 1)
-  {
-    NewMillis = OldestMillis - NewMillis;
-  }
 
   // Serial.print("Current time: ");
   // Serial.print(h);
@@ -83,7 +93,7 @@ void loop()
   // Serial.print(m);
   // Serial.print(":");
   // Serial.println(s);
-  displayTime();
+  displayChrono();
   Serial.println(NewMillis);
   delay(1000);
 }
