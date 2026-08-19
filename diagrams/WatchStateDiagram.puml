@@ -1,0 +1,39 @@
+@startuml WatchStateDiagram
+
+start
+
+partition global {
+
+:WatchState *currentState = null
+WatchState *clockState = null
+WatchState *chronoState = null;
+
+}
+
+
+partition setup() {
+
+:clockState = new WSClock()
+chronoState = new WSChrono()
+currentState = clockState;
+}
+
+partition loop() {
+repeat
+    :currentState->tick()
+    currentState->display();
+    if (buttonPressed) then (true)
+        if (currentState == clockState) then
+            :currentState = chronoState;
+        else
+            :currentState = clockState;
+        endif
+        note right
+            toggle states
+        end note
+    endif
+repeat while ()
+}
+stop
+
+@enduml

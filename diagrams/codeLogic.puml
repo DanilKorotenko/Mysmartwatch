@@ -1,0 +1,25 @@
+@startuml ChronographLogic
+
+start
+
+partition setup() {
+
+:currentSeconds = 0
+currentMillis = 0
+oldMillis = 0;
+}
+
+partition loop() {
+repeat
+    :nowMillis = millis()
+    currentMillis = nowMillis - oldMillis
+    oldMillis = nowMillis;
+    if (currentMillis > 1000) then
+        :currentSeconds++
+        currentMillis = 0;
+    endif
+repeat while ()
+}
+stop
+
+@enduml

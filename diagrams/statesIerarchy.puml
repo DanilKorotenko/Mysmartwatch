@@ -1,0 +1,28 @@
+@startuml StatesIerarchy
+
+class WatchState {
+    void display();
+    void tick();
+}
+
+class WSClock {
+    int hours;
+    int minutes;
+    int seconds;
+
+    void display();
+    void tick();
+}
+
+class WSChrono {
+    int milliseconds;
+    int seconds;
+
+    void display();
+    void tick();
+}
+
+WatchState <|-- WSClock
+WatchState <|-- WSChrono
+
+@enduml
