@@ -9,18 +9,41 @@ unsigned long NewMillis;
 const int buttonPin = 2;  // Pin connected to button
 int buttonState = 0;      // Variable to store button state
 int ButtonPressed = 0;
+int ChronoHour;
+int ChronoMinute;
+int ChronoSecond;
+int ChronoMillis;
 
 void displayChrono()
 {
   display.clearDisplay();
 
+    display.setTextColor(WHITE);
+
   String title = "STOPWATCH";
 
-    display.setTextColor(WHITE);
+    int Hours = ChronoHour;
+    int Minutes = ChronoMinute;
+    int Seconds = ChronoSecond;
+    int Millis = ChronoMillis;
 
   display.setTextSize(2);
   display.setCursor(0,0);
   display.print(title);
+
+  display.setTextSize(4);
+  display.setCursor(0,18);
+  display.print(Hours,10);
+
+  display.drawChar(52, 18, ':', WHITE, BLACK, 4);
+
+  display.setTextSize(4);
+  display.setCursor(78,18);
+  display.print(Minutes,10);
+
+  display.setTextSize(2);
+  display.setCursor(52,50);
+  display.print(Seconds,10);
 
   display.display();
 }
@@ -29,13 +52,13 @@ void displayTime()
 {
   display.clearDisplay();
 
+  display.setTextColor(WHITE);
+
     String title = "TIME";
 
     int Hours = hour();
     int Minutes = minute();
     int Seconds = second();
-
-  display.setTextColor(WHITE);
 
   display.setTextSize(2);
   display.setCursor(0,0);
