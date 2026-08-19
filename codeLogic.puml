@@ -2,21 +2,21 @@
 
 start
 
+partition setup() {
+
 :currentSeconds = 0
 currentMillis = 0
 oldMillis = 0;
-
-note right 
-    setup()
-end note
+}
 
 partition loop() {
 repeat
-    :nowMillis = millis();
-    :currentMillis = nowMillis - oldMillis;
-    :oldMillis = nowMillis; 
+    :nowMillis = millis()
+    currentMillis = nowMillis - oldMillis
+    oldMillis = nowMillis;
     if (currentMillis > 1000) then
-        :currentSeconds++;
+        :currentSeconds++
+        currentMillis = 0;
     endif
 repeat while ()
 }
