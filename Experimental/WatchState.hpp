@@ -5,6 +5,6 @@ class WatchState
 public:
     WatchState();
 
-    void tick();
-    void display();
+    virtual void tick();
+    virtual void display();
 };
