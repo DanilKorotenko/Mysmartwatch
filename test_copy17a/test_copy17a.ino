@@ -6,13 +6,17 @@
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
 unsigned long OldestMillis;
 unsigned long NewMillis;
-const int buttonPin = 2;  // Pin connected to button
-int buttonState = 0;      // Variable to store button state
+const int ButtonPin = 2;  // Pin connected to button
+int ButtonState = 0;      // Variable to store button state
 int ButtonPressed = 0;
-int ChronoHour;
-int ChronoMinute;
-int ChronoSecond;
-int ChronoMillis;
+int ChronoHour = 1;
+int ChronoMinute = 2;
+int ChronoSecond = 3;
+int ChronoMillis = 999;
+int Hours;
+int Minutes;
+int Seconds;
+int Millis;
 
 void displayChrono()
 {
@@ -84,7 +88,7 @@ void displayTime()
 
 void setup() 
 {
-  pinMode(buttonPin, INPUT_PULLUP); // Enable internal pull-up resistor
+  pinMode(ButtonPin, INPUT_PULLUP); 
   Serial.begin(9600); // Start serial communication at 9600 baud
   Serial.println("Debugging started...");
   setTime(16, 34, 0, 17, 8, 2026); // hour, min, sec, day, month, year
@@ -98,10 +102,10 @@ void setup()
 
 void loop() 
 {
-  buttonState = digitalRead(buttonPin);
+  ButtonState = digitalRead(ButtonPin);
   OldestMillis = millis();
 
-  if (buttonState == LOW)
+  if (ButtonState == LOW)
   {
     ButtonPressed = 1;
   } else;
