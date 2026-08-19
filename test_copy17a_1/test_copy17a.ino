@@ -2,6 +2,9 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <TimeLib.h>
+
+#include "WatchState.hpp"
+
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
 unsigned long OldestMillis;
@@ -17,6 +20,10 @@ int Hours;
 int Minutes;
 int Seconds;
 int Millis;
+
+WatchState *currentState = null;
+WSClock *clockState = null;
+// WatchState *chronoState = null;
 
 void displayChrono()
 {
@@ -90,23 +97,27 @@ void setup()
     pinMode(ButtonPin, INPUT_PULLUP); 
     Serial.begin(9600); // Start serial communication at 9600 baud
     Serial.println("Debugging started...");
-    setTime(16, 34, 0, 17, 8, 2026); // hour, min, sec, day, month, year
+    setTime(16, 34, 0, 17, 8, 2026); // hour, min, sec, day, month, year // delete from here
     if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
     {
         Serial.println(F("SSD1306 allocation failed"));
         for(;;);
     }
+
+    clockState = new WSClock()
+    // chronoState = new WSChrono()
+    currentState = clockState;
 }
 
 void loop() 
 {
-    ButtonState = digitalRead(ButtonPin);
-    OldestMillis = millis();
+    // ButtonState = digitalRead(ButtonPin);
+    // OldestMillis = millis();
 
-    if (ButtonState == LOW)
-    {
-        ButtonPressed = 1;
-    }
+    // if (ButtonState == LOW)
+    // {
+    //     ButtonPressed = 1;
+    // }
 
     // Serial.print("Current time: ");
     // Serial.print(h);
@@ -114,6 +125,10 @@ void loop()
     // Serial.print(m);
     // Serial.print(":");
     // Serial.println(s);
+    
+    currentState->tick();
+    currentState->display();
+
     displayChrono();
     Serial.println(NewMillis);
     delay(1000);
