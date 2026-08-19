@@ -20,43 +20,43 @@ int Millis;
 
 void displayChrono()
 {
-  display.clearDisplay();
+    display.clearDisplay();
 
     display.setTextColor(WHITE);
 
-  String title = "STOPWATCH";
+    String title = "STOPWATCH";
 
     int Hours = ChronoHour;
     int Minutes = ChronoMinute;
     int Seconds = ChronoSecond;
     int Millis = ChronoMillis;
 
-  display.setTextSize(2);
-  display.setCursor(0,0);
-  display.print(title);
+    display.setTextSize(2);
+    display.setCursor(0,0);
+    display.print(title);
 
-  display.setTextSize(4);
-  display.setCursor(0,18);
-  display.print(Hours,10);
+    display.setTextSize(4);
+    display.setCursor(0,18);
+    display.print(Hours,10);
 
-  display.drawChar(52, 18, ':', WHITE, BLACK, 4);
+    display.drawChar(52, 18, ':', WHITE, BLACK, 4);
 
-  display.setTextSize(4);
-  display.setCursor(78,18);
-  display.print(Minutes,10);
+    display.setTextSize(4);
+    display.setCursor(78,18);
+    display.print(Minutes,10);
 
-  display.setTextSize(2);
-  display.setCursor(52,50);
-  display.print(Seconds,10);
+    display.setTextSize(2);
+    display.setCursor(52,50);
+    display.print(Seconds,10);
 
-  display.display();
+    display.display();
 }
 
 void displayTime()
 {
-  display.clearDisplay();
+    display.clearDisplay();
 
-  display.setTextColor(WHITE);
+    display.setTextColor(WHITE);
 
     String title = "TIME";
 
@@ -64,64 +64,58 @@ void displayTime()
     int Minutes = minute();
     int Seconds = second();
 
-  display.setTextSize(2);
-  display.setCursor(0,0);
-  display.print(title);
+    display.setTextSize(2);
+    display.setCursor(0,0);
+    display.print(title);
 
-  display.setTextSize(4);
-  display.setCursor(0,18);
-  display.print(Hours,10);
+    display.setTextSize(4);
+    display.setCursor(0,18);
+    display.print(Hours,10);
 
-  display.drawChar(52, 18, ':', WHITE, BLACK, 4);
+    display.drawChar(52, 18, ':', WHITE, BLACK, 4);
 
-  display.setTextSize(4);
-  display.setCursor(78,18);
-  display.print(Minutes,10);
+    display.setTextSize(4);
+    display.setCursor(78,18);
+    display.print(Minutes,10);
 
-  display.setTextSize(2);
-  display.setCursor(52,50);
-  display.print(Seconds,10);
+    display.setTextSize(2);
+    display.setCursor(52,50);
+    display.print(Seconds,10);
 
-  display.display();
-
+    display.display();
 }
 
 void setup() 
 {
-  pinMode(ButtonPin, INPUT_PULLUP); 
-  Serial.begin(9600); // Start serial communication at 9600 baud
-  Serial.println("Debugging started...");
-  setTime(16, 34, 0, 17, 8, 2026); // hour, min, sec, day, month, year
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
-  {
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;);
-  }
-
+    pinMode(ButtonPin, INPUT_PULLUP); 
+    Serial.begin(9600); // Start serial communication at 9600 baud
+    Serial.println("Debugging started...");
+    setTime(16, 34, 0, 17, 8, 2026); // hour, min, sec, day, month, year
+    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) 
+    {
+        Serial.println(F("SSD1306 allocation failed"));
+        for(;;);
+    }
 }
 
 void loop() 
 {
-  ButtonState = digitalRead(ButtonPin);
-  OldestMillis = millis();
+    ButtonState = digitalRead(ButtonPin);
+    OldestMillis = millis();
 
-  if (ButtonState == LOW)
-  {
-    ButtonPressed = 1;
-  } else;
-  
-{
-  
-}
+    if (ButtonState == LOW)
+    {
+        ButtonPressed = 1;
+    }
 
-  // Serial.print("Current time: ");
-  // Serial.print(h);
-  // Serial.print(":");
-  // Serial.print(m);
-  // Serial.print(":");
-  // Serial.println(s);
-  displayChrono();
-  Serial.println(NewMillis);
-  delay(1000);
+    // Serial.print("Current time: ");
+    // Serial.print(h);
+    // Serial.print(":");
+    // Serial.print(m);
+    // Serial.print(":");
+    // Serial.println(s);
+    displayChrono();
+    Serial.println(NewMillis);
+    delay(1000);
 }
 
