@@ -10,58 +10,58 @@ WSChrono::WSChrono(Adafruit_SSD1306 *anOledDisplay)
 
 void WSChrono::tick()
 {
-    NowMillis = Millis();
+    NowMillis = millis();
     CurrentMillis = NowMillis - OldMillis;
-    OldMillis = NowMillis
+    OldMillis = NowMillis;
 
-    if (CurrentMillis => 1000); 
+    if (CurrentMillis >= 1000); 
     {
-        ChronoSecond = ChronoSecond + 1
+        ChronoSecond = ChronoSecond + 1;
     }
 
 
-        if (ChronoSecond => 60); 
+        if (ChronoSecond >= 60); 
     {
-        ChronoMinute = ChronoMinute + 1
+        ChronoMinute = ChronoMinute + 1;
     }
 
 
-        if (ChronoMinute => 60); 
+        if (ChronoMinute >= 60); 
     {
-        ChronoHour = ChronoHour + 1
+        ChronoHour = ChronoHour + 1;
     }
 
-        if (ChronoHour => 96); 
+        if (ChronoHour >= 96); 
     {
-        Serial.print("Chrono > 4 days")
+        Serial.print("Stack overflow in Days:WSChrono line 36");
     }
 }
 
 void WSChrono::display()
 {
-    display.clearDisplay();
+    oledDisplay->clearDisplay();
 
-    display.setTextColor(WHITE);
+    oledDisplay->setTextColor(WHITE);
 
     String title = "STOPWATCH";
 
-    display.setTextSize(2);
-    display.setCursor(0,0);
-    display.print(title);
+    oledDisplay->setTextSize(2);
+    oledDisplay->setCursor(0,0);
+    oledDisplay->print(title);
 
-    display.setTextSize(4);
-    display.setCursor(0,18);
-    display.print(Hours,10);
+    oledDisplay->setTextSize(4);
+    oledDisplay->setCursor(0,18);
+    oledDisplay->print(Hours,10);
 
-    display.drawChar(52, 18, ':', WHITE, BLACK, 4);
+    oledDisplay->drawChar(52, 18, ':', WHITE, BLACK, 4);
 
-    display.setTextSize(4);
-    display.setCursor(78,18);
-    display.print(Minutes,10);
+    oledDisplay->setTextSize(4);
+    oledDisplay->setCursor(78,18);
+    oledDisplay->print(Minutes,10);
 
-    display.setTextSize(2);
-    display.setCursor(52,50);
-    display.print(Seconds,10);
+    oledDisplay->setTextSize(2);
+    oledDisplay->setCursor(52,50);
+    oledDisplay->print(Seconds,10);
 
-    display.display();
+    oledDisplay->display();
 }

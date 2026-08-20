@@ -6,6 +6,8 @@
 #include "WatchState.hpp"
 #include "WSClock.hpp"
 
+#include "WSChrono.hpp"
+
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
 unsigned long OldestMillis;
@@ -13,52 +15,10 @@ unsigned long NewMillis;
 const int ButtonPin = 2;  // Pin connected to button
 int ButtonState = 0;      // Variable to store button state
 int ButtonPressed = 0;
-int ChronoHour = 1;
-int ChronoMinute = 2;
-int ChronoSecond = 3;
-int ChronoMillis = 999;
 
 WatchState *currentState = NULL;
 WSClock *clockState = NULL;
-// WatchState *chronoState = null;
-
-void displayChrono()
-{
-    display.clearDisplay();
-
-    display.setTextColor(WHITE);
-
-    String title = "STOPWATCH";
-
-    int Hours = ChronoHour;
-    int Minutes = ChronoMinute;
-    int Seconds = ChronoSecond;
-    int Millis = ChronoMillis;
-
-    display.setTextSize(2);
-    display.setCursor(0,0);
-    display.print(title);
-
-    display.setTextSize(4);
-    display.setCursor(0,18);
-    display.print(Hours,10);
-
-    display.drawChar(52, 18, ':', WHITE, BLACK, 4);
-
-    display.setTextSize(4);
-    display.setCursor(78,18);
-    display.print(Minutes,10);
-
-    display.setTextSize(2);
-    display.setCursor(52,50);
-    display.print(Seconds,10);
-
-    display.display();
-}
-
-void displayTime()
-{
-}
+WatchState *chronoState = NULL;
 
 void setup() 
 {
@@ -72,8 +32,8 @@ void setup()
     }
 
     clockState = new WSClock(&display);
-    // chronoState = new WSChrono()
-    currentState = clockState;
+    chronoState = new WSChrono(&display);
+    currentState = chronoState;
 }
 
 void loop() 

@@ -7,10 +7,10 @@
 #include <Adafruit_SSD1306.h>
 #include <TimeLib.h>
 
-class WSClock : public WatchState
+class WSChrono : public WatchState
 {
 public:
-    WSClock(Adafruit_SSD1306 *anOledDisplay);
+    WSChrono(Adafruit_SSD1306 *anOledDisplay);
 
     void tick() override;
     void display() override;
@@ -18,7 +18,14 @@ public:
 private:
     Adafruit_SSD1306 *oledDisplay;
 
-    int hours;
-    int minutes;
-    int seconds;
+    int ChronoHour;
+    int ChronoMinute;
+    int ChronoSecond;
+    int ChronoMillis;
+    int NowMillis;
+    int CurrentMillis;
+    int OldMillis;
+    int Hours;
+    int Minutes;
+    int Seconds;
 };
