@@ -50,11 +50,24 @@ void displayChrono()
     display.print(Seconds,10);
 
     display.display();
+
+    if (ButtonState == LOW)
+    {
+        ButtonPressed = 1;
+    }
 }
 
-void NextState
+void DisplayToOled()
 {
-    
+    if (ButtonPressed == 0)
+    {
+        displayChrono();
+    }
+    else
+    {
+        displayTime();
+    }
+
 }
 
 void displayTime()
@@ -88,6 +101,11 @@ void displayTime()
     display.print(Seconds,10);
 
     display.display();
+
+    if (ButtonState == LOW)
+    {
+        ButtonPressed = 0;
+    }
 }
 
 void setup() 
@@ -105,21 +123,13 @@ void setup()
 
 void loop() 
 {
-    ButtonState = digitalRead(ButtonPin);
-    OldestMillis = millis();
-
-    if (ButtonState == LOW)
-    {
-        ButtonPressed = 1;
-    }
-
     // Serial.print("Current time: ");
     // Serial.print(h);
     // Serial.print(":");
     // Serial.print(m);
     // Serial.print(":");
     // Serial.println(s);
-    displayChrono();
+    DisplayToOled();
     Serial.println(NewMillis);
     delay(1000);
 }
