@@ -17,3 +17,8 @@ void WatchState::display()
     // display "empty state"
     Serial.println("empty state display");
 }
+
+void WatchState::reset()
+{
+    
+}

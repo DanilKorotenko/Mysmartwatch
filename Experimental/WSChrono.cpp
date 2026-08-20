@@ -5,16 +5,7 @@
 WSChrono::WSChrono(Adafruit_SSD1306 *anOledDisplay)
 {
     oledDisplay = anOledDisplay;
-    ChronoSecond = 0;
-    ChronoHour = 0;
-    ChronoMinute = 0;
-    ChronoSecond = 0;
-    ChronoMillis = 0;
-    CurrentMillis = 0;
-    OldMillis = 0;
-    Hours = 0;
-    Minutes = 0;
-    Seconds = 0;
+    reset();
 }
 
 void WSChrono::tick()
@@ -47,6 +38,20 @@ void WSChrono::tick()
     }
 }
 
+void WSChrono::reset()
+{
+    ChronoSecond = 0;
+    ChronoHour = 0;
+    ChronoMinute = 0;
+    ChronoSecond = 0;
+    ChronoMillis = 0;
+    CurrentMillis = 0;
+    OldMillis = 0;
+    Hours = 0;
+    Minutes = 0;
+    Seconds = 0;
+}
+
 void WSChrono::display()
 {
     oledDisplay->clearDisplay();
@@ -75,3 +80,4 @@ void WSChrono::display()
 
     oledDisplay->display();
 }
+

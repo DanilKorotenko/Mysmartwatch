@@ -14,6 +14,7 @@ public:
 
     void tick() override;
     void display() override;
+    void reset() override;
 
 private:
     Adafruit_SSD1306 *oledDisplay;

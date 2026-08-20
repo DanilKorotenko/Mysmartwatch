@@ -20,6 +20,15 @@ WatchState *currentState = NULL;
 WSClock *clockState = NULL;
 WatchState *chronoState = NULL;
 
+void initStates()
+{
+    clockState = new WSClock(&display);
+    chronoState = new WSChrono(&display);
+    chronoState->nextState = clockState;
+    clockState->nextState = chronoState;
+    currentState = clockState;
+}
+
 void setup() 
 {
     pinMode(ButtonPin, INPUT_PULLUP); 
@@ -33,9 +42,7 @@ void setup()
         for(;;);
     }
 
-    clockState = new WSClock(&display);
-    chronoState = new WSChrono(&display);
-    currentState = chronoState;
+    initStates();
 }
 
 bool isButtonPressed()
@@ -50,8 +57,8 @@ void loop()
     if (isButtonPressed())
     {
         Serial.println("button pressed");
-                
-
+        currentState = currentState->nextState;
+        currentState->reset();
     }
 
     currentState->tick();

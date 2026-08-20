@@ -7,4 +7,7 @@ public:
 
     virtual void tick();
     virtual void display();
+    virtual void reset();
+
+    WatchState *nextState;
 };
