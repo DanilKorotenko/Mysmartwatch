@@ -22,7 +22,6 @@ private:
     int ChronoMinute;
     int ChronoSecond;
     int ChronoMillis;
-    int NowMillis;
     int CurrentMillis;
     int OldMillis;
     int Hours;
