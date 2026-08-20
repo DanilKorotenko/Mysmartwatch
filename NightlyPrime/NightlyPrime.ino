@@ -4,15 +4,15 @@
 #include <TimeLib.h>
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
-unsigned long OldestMillis;
+unsigned long OldMillis;
 unsigned long NewMillis;
 const int ButtonPin = 2;  // Pin connected to button
 int ButtonState = 0;      // Variable to store button state
-int ButtonPressed = 0;
-int ChronoHour = 1;
-int ChronoMinute = 2;
-int ChronoSecond = 3;
-int ChronoMillis = 999;
+int MenuState = 0;
+int ChronoHour = 0;
+int ChronoMinute = 0;
+int ChronoSecond = 0;
+int ChronoMillis = 0;
 int Hours;
 int Minutes;
 int Seconds;
@@ -37,35 +37,70 @@ void displayChrono()
 
     display.setTextSize(4);
     display.setCursor(0,18);
-    display.print(Hours,10);
+    display.print(ChronoHour,10);
 
     display.drawChar(52, 18, ':', WHITE, BLACK, 4);
 
     display.setTextSize(4);
     display.setCursor(78,18);
-    display.print(Minutes,10);
+    display.print(ChronoMinute,10);
 
     display.setTextSize(2);
-    display.setCursor(52,50);
-    display.print(Seconds,10);
+    display.setCursor(30,50);
+    display.print(ChronoSecond,10);
+
+    display.drawChar(57, 50, ':', WHITE, BLACK, 2);
+
+    display.setTextSize(2);
+    display.setCursor(69,50);
+    display.print(ChronoMillis,10);
+
+    NewMillis = millis();
+    ChronoMillis =  ChronoMillis +(NewMillis - OldMillis);
+    OldMillis = NewMillis;
+
+    if (ChronoMillis >= 1000)
+    {
+        ChronoSecond = ChronoSecond + 1;
+        ChronoMillis = 0;
+    }
+
+        if (ChronoSecond >= 60)
+    {
+        ChronoMinute = ChronoMinute + 1;
+        ChronoSecond = 0;
+    }
+
+        if (ChronoMinute >= 60)
+    {
+        ChronoHour = ChronoHour + 1;
+        ChronoMinute = 0;
+    }
+
+        if (ChronoHour >= 99)
+    {
+        Serial.println("OVERFLOW ERROR");
+        ChronoHour = 0;
+    }
+
+    buttonState = digitalRead(buttonPin);
+
+    if (buttonState == LOW) { // LOW means pressed
+        MenuState = 0;
+        delay(200); // Simple debounce delay
+    }
 
     display.display();
-
-    if (ButtonState == LOW)
-    {
-        ButtonPressed = 1;
-    }
 }
 
-void DisplayToOled()
+void MenuChange()
 {
-    if (ButtonPressed == 0)
-    {
-        displayChrono();
-    }
-    else
+    if (MenuState == 0)
     {
         displayTime();
+    } else 
+    {
+        displayChrono();
     }
 
 }
@@ -100,12 +135,15 @@ void displayTime()
     display.setCursor(52,50);
     display.print(Seconds,10);
 
+    buttonState = digitalRead(buttonPin);
+
+    if (buttonState == LOW) { // LOW means pressed
+        MenuState = 1;
+        delay(200); // Simple debounce delay
+    }
+
     display.display();
 
-    if (ButtonState == LOW)
-    {
-        ButtonPressed = 0;
-    }
 }
 
 void setup() 
@@ -129,8 +167,24 @@ void loop()
     // Serial.print(m);
     // Serial.print(":");
     // Serial.println(s);
-    DisplayToOled();
+    displayChrono();
     Serial.println(NewMillis);
-    delay(1000);
 }
 
+
+
+
+
+
+
+
+
+
+void loop() {
+  buttonState = digitalRead(buttonPin);
+
+  if (buttonState == LOW) { // LOW means pressed
+    Serial.println("Button pressed!");
+    delay(200); // Simple debounce delay
+  }
+}
