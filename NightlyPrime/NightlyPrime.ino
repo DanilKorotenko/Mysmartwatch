@@ -6,8 +6,8 @@
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
 unsigned long OldMillis;
 unsigned long NewMillis;
-const int ButtonPin = 2;  // Pin connected to button
-int ButtonState = 0;      // Variable to store button state
+const int buttonPin = 2;  // Pin connected to button
+int buttonState = 0;      // Variable to store button state
 int MenuState = 0;
 int ChronoHour = 0;
 int ChronoMinute = 0;
@@ -55,10 +55,6 @@ void displayChrono()
     display.setCursor(69,50);
     display.print(ChronoMillis,10);
 
-    NewMillis = millis();
-    ChronoMillis =  ChronoMillis +(NewMillis - OldMillis);
-    OldMillis = NewMillis;
-
     if (ChronoMillis >= 1000)
     {
         ChronoSecond = ChronoSecond + 1;
@@ -93,8 +89,16 @@ void displayChrono()
     display.display();
 }
 
+void ChronoTick()
+{
+    NewMillis = millis();
+    ChronoMillis =  ChronoMillis +(NewMillis - OldMillis);
+    OldMillis = NewMillis;
+}
+
 void MenuChange()
 {
+
     if (MenuState == 0)
     {
         displayTime();
@@ -111,11 +115,11 @@ void displayTime()
 
     display.setTextColor(WHITE);
 
-    String title = "TIME";
-
     int Hours = hour();
     int Minutes = minute();
     int Seconds = second();
+
+    String title = "TIME";
 
     display.setTextSize(2);
     display.setCursor(0,0);
@@ -148,7 +152,7 @@ void displayTime()
 
 void setup() 
 {
-    pinMode(ButtonPin, INPUT_PULLUP); 
+    pinMode(buttonPin, INPUT_PULLUP); 
     Serial.begin(9600); // Start serial communication at 9600 baud
     Serial.println("Debugging started...");
     setTime(16, 34, 0, 17, 8, 2026); // hour, min, sec, day, month, year
@@ -167,24 +171,6 @@ void loop()
     // Serial.print(m);
     // Serial.print(":");
     // Serial.println(s);
-    displayChrono();
+    MenuChange();
     Serial.println(NewMillis);
-}
-
-
-
-
-
-
-
-
-
-
-void loop() {
-  buttonState = digitalRead(buttonPin);
-
-  if (buttonState == LOW) { // LOW means pressed
-    Serial.println("Button pressed!");
-    delay(200); // Simple debounce delay
-  }
 }
