@@ -10,6 +10,8 @@ EncoderController::EncoderController(int aCLKPin, int aDTPin, int aSWPin)
     , didClickCallback(NULL)
 {
     pinMode(swPin, INPUT_PULLUP);
+    pinMode(clkPin, INPUT); 
+    pinMode(dtPin, INPUT); 
 }
 
 bool EncoderController::isButtonDown()
