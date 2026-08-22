@@ -81,3 +81,17 @@ void WSChrono::display()
     oledDisplay->display();
 }
 
+void WSChrono::encoderDidClick()
+{
+    reset();
+}
+
+void WSChrono::encoderDidUp()
+{
+
+}
+
+void WSChrono::encoderDidDown()
+{
+
+}

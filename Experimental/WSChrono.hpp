@@ -16,6 +16,10 @@ public:
     void display() override;
     void reset() override;
 
+    void encoderDidClick() override;
+    void encoderDidUp() override;
+    void encoderDidDown() override;
+
 private:
     Adafruit_SSD1306 *oledDisplay;
 
