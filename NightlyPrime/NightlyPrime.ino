@@ -18,6 +18,15 @@ int Minutes;
 int Seconds;
 int Millis;
 
+enum MenuState
+{
+    DISPLAY_TIME,
+    DISPLAY_CHRONO,
+    DISPLAY_SETTINGS,
+
+    MAX_MENUSTATE
+}
+
 void displayChrono()
 {
     display.clearDisplay();
@@ -58,7 +67,7 @@ void displayChrono()
     buttonState = digitalRead(buttonPin);
 
     if (buttonState == LOW) { // LOW means pressed
-        MenuState = 0;
+        MenuState = MENU_TIME;
         delay(200); // Simple debounce delay
     }
 
