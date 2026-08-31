@@ -4,9 +4,13 @@
 
 ButtonController::ButtonController(int aButtonPin)
   : buttonDidUp(false)
+  , buttonPin(aButtonPin)
   , didClickCallback(NULL)
 {
-    buttonPin = aButtonPin;
+}
+
+void ButtonController::setup()
+{
     pinMode(buttonPin, INPUT_PULLUP);
 }
 

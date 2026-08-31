@@ -86,10 +86,65 @@ void WSClock::encoderDidClick()
 
 void WSClock::encoderDidUp()
 {
+    int localHours = hour();
+    int localMinutes = minute();
 
+    switch(currentSelection)
+    {
+        case HOURS:
+        {
+            localHours++;
+            if (localHours > 23) 
+            {
+                localHours = 0;
+            }
+            break;
+        }
+        
+        case MINUTES:
+        {
+            localMinutes++;
+            if (localMinutes > 59) 
+            {
+                localMinutes = 0;
+            }
+            break;
+        }
+        default: break;
+    }
+
+    setTime(localHours, localMinutes, seconds, 17, 8, 2026);
 }
 
 void WSClock::encoderDidDown()
 {
+    int localHours = hour();
+    int localMinutes = minute();
 
+    switch(currentSelection)
+    {
+        case HOURS:
+        {
+            localHours--;
+            if (localHours < 0) 
+            {
+                localHours = 23;
+            }
+            break;
+        }
+        
+        case MINUTES:
+        {
+            localMinutes--;
+            if (localMinutes < 0) 
+            {
+                localMinutes = 59;
+            }
+            break;
+        }
+
+        default: break;
+    }
+
+    setTime(localHours, localMinutes, seconds, 17, 8, 2026);
 }

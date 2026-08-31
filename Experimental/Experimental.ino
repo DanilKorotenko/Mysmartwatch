@@ -14,17 +14,16 @@
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
 
-const int EncoderSW = 5;
-const int EncoderDT = 4;
-const int EncoderCLK = 3;
-
 WatchState *currentState = NULL;
 
 WSClock clockState(&display);
 WSChrono chronoState(&display);
 
-ButtonController buttonController(2); // ButtonPin = 2;  // Pin connected to button
-EncoderController encoderController(EncoderCLK, EncoderDT, EncoderSW);
+ButtonController buttonController(4);
+ButtonController encoderButtonController(5);
+
+#define ENCODER_CLK 2
+EncoderController encoderController(ENCODER_CLK, 3);
 
 void initStates()
 {
@@ -58,6 +57,11 @@ void encoderDidDown()
     currentState->encoderDidDown();
 }
 
+void readEncoder()
+{
+    encoderController.process();
+}
+
 void setup() 
 {
     Serial.begin(9600); // Start serial communication at 9600 baud
@@ -71,9 +75,15 @@ void setup()
 
     initStates();
 
+    buttonController.setup();
+    encoderButtonController.setup();
+
     buttonController.didClickCallback = switchState;
-    
-    encoderController.didClickCallback = encoderDidClick;
+    encoderButtonController.didClickCallback = encoderDidClick;
+
+    encoderController.setup();
+    attachInterrupt(digitalPinToInterrupt(ENCODER_CLK), readEncoder, FALLING);
+
     encoderController.didUpCallback = encoderDidUp;
     encoderController.didDownCallback = encoderDidDown;
 }
@@ -81,11 +91,11 @@ void setup()
 void loop() 
 {
     buttonController.process();
-    encoderController.process();
+    encoderButtonController.process();
 
     currentState->tick();
     currentState->display();
 
-    delay(100);
+    // delay(50);
 }
 

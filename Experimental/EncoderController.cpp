@@ -2,33 +2,30 @@
 
 #include <Arduino.h>
 
-EncoderController::EncoderController(int aCLKPin, int aDTPin, int aSWPin)
+EncoderController::EncoderController(int aCLKPin, int aDTPin)
     : clkPin(aCLKPin)
     , dtPin(aDTPin)
-    , swPin(aSWPin)
-    , buttonDidUp(false)
-    , didClickCallback(NULL)
+    , lastClk(HIGH)
+    , didUpCallback(NULL)
+    , didDownCallback(NULL)
 {
-    pinMode(swPin, INPUT_PULLUP);
+}
+
+void EncoderController::setup()
+{
     pinMode(clkPin, INPUT); 
     pinMode(dtPin, INPUT); 
 }
 
-bool EncoderController::isButtonDown()
-{
-    return digitalRead(swPin) == LOW;
-}
-
 void EncoderController::process()
 {
-    if (isButtonDown() && buttonDidUp)
+    int dtValue = digitalRead(dtPin);
+    if (dtValue == HIGH) 
     {
-        this->didClickCallback();
-        buttonDidUp = false;
+        this->didUpCallback();
     }
-
-    if (!isButtonDown())
+    if (dtValue == LOW) 
     {
-        buttonDidUp = true;
+        this->didDownCallback();
     }
 }

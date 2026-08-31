@@ -6,7 +6,7 @@ class ButtonController
 {
 public:
     ButtonController(int aButtonPin);
-
+    void setup();
     void process();
 
     DidClickCallback didClickCallback;
