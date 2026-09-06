@@ -2,6 +2,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <TimeLib.h>
+
+#define ENCODER_DO_NOT_USE_INTERRUPS
 #include <Encoder.h>
 
 #include "WatchState.hpp"
@@ -49,13 +51,13 @@ void encoderDidClick()
 
 void encoderDidUp()
 {
-    Serial.println("encoder did up");
+    // Serial.println("encoder did up");
     currentState->encoderDidUp();
 }
 
 void encoderDidDown()
 {
-    Serial.println("encoder did down");
+    // Serial.println("encoder did down");
     currentState->encoderDidDown();
 }
 
