@@ -2,12 +2,19 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <TimeLib.h>
-#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET); //Declaration for the size,setting,etc. of the OLED
+#include <ezButton.h>
+#define OLED_RESET     -1
+#define CLK_PIN 2
+#define DT_PIN 3
+#define SW_PIN 4
+#define DIRECTION_CW 0  // clockwise direction
+#define DIRECTION_CCW 1 // counter-clockwise direction
+Adafruit_SSD1306 display(128, 64, &Wire, OLED_RESET);
+ezButton button(SW_PIN); // create ezButton object for pin 7;
 unsigned long OldMillis;
 unsigned long NewMillis;
-const int buttonPin = 2;  // Pin connected to button
-int buttonState = 0;      // Variable to store button state
+const int buttonPin = 2;
+int buttonState = 0;
 int MenuState = 0;
 int ChronoHour = 0;
 int ChronoMinute = 0;
@@ -17,6 +24,10 @@ int Hours;
 int Minutes;
 int Seconds;
 int Millis;
+int counter = 0;
+int direction = DIRECTION_CW;
+int CLK_state;
+int prev_CLK_state;
 
 //enum MenuState
 //{
@@ -66,9 +77,10 @@ void displayChrono()
 
     buttonState = digitalRead(buttonPin);
 
-    if (buttonState == LOW) { // LOW means pressed
-        MenuState = 0;  //MENU_TIME;
-        delay(200); // Simple debounce delay
+    if (button.isPressed()) 
+    {
+        MenuState = 0;
+        delay(200);
     }
 
     display.display();
@@ -149,7 +161,8 @@ void displayTime()
 
     buttonState = digitalRead(buttonPin);
 
-    if (buttonState == LOW) { // LOW means pressed
+    if (button.isPressed())
+    {
         MenuState = 1;
         delay(200); // Simple debounce delay
     }
@@ -168,85 +181,57 @@ void setup()
         Serial.println(F("SSD1306 allocation failed"));
         for(;;);
     }
+    pinMode(CLK_PIN, INPUT);
+     pinMode(DT_PIN, INPUT);
+    button.setDebounceTime(50);
+    prev_CLK_state = digitalRead(CLK_PIN);
 }
 
 void loop() 
 {
+    ButtonEncoderChange();
     ChronoTick();
     MenuChange();
-    Serial.println(NewMillis);
+//    Serial.println(NewMillis);
 }
 
 
-// #include <ezButton.h> // The library to use for SW pin
 
-// #define CLK_PIN 2 // The Arduino Nano 33 IoT pin D2 connected to the rotary encoder's CLK pin
-// #define DT_PIN 3  // The Arduino Nano 33 IoT pin D3 connected to the rotary encoder's DT pin
-// #define SW_PIN 4  // The Arduino Nano 33 IoT pin D4 connected to the rotary encoder's SW pin
+void ButtonEncoderChange()
+{
+     button.loop(); // MUST call the loop() function first
 
-// #define DIRECTION_CW 0  // clockwise direction
-// #define DIRECTION_CCW 1 // counter-clockwise direction
+     // read the current state of the rotary encoder's CLK pin
+     CLK_state = digitalRead(CLK_PIN);
 
-// int counter = 0;
-// int direction = DIRECTION_CW;
-// int CLK_state;
-// int prev_CLK_state;
+     // If the state of CLK is changed, then pulse occurred
+     // React to only the rising edge (from LOW to HIGH) to avoid double count
+     if (CLK_state != prev_CLK_state && CLK_state == HIGH)
+     {
+         // if the DT state is HIGH
+         // The encoder is rotating in counter-clockwise direction => decrease the counter
+         if (digitalRead(DT_PIN) == HIGH)
+        {
+             counter--;
+             direction = DIRECTION_CCW;
+         }
+         else
+         {
+             // The encoder is rotating in clockwise direction => increase the counter
+             counter++;
+             direction = DIRECTION_CW;
+         }
 
-// ezButton button(SW_PIN); // create ezButton object for pin 7;
+         Serial.print("Rotary Encoder:: direction: ");
+         if (direction == DIRECTION_CW)
+             Serial.print("Clockwise");
+         else
+             Serial.print("Counter-clockwise");
 
-// void setup()
-// {
-//     Serial.begin(9600);
+         Serial.print(" - count: ");
+         Serial.println(counter);
+     }
 
-//     // Configure encoder pins as inputs
-//     pinMode(CLK_PIN, INPUT);
-//     pinMode(DT_PIN, INPUT);
-//     button.setDebounceTime(50); // set debounce time to 50 milliseconds
-
-//     // read the initial state of the rotary encoder's CLK pin
-//     prev_CLK_state = digitalRead(CLK_PIN);
-// }
-
-// void loop()
-// {
-//     button.loop(); // MUST call the loop() function first
-
-//     // read the current state of the rotary encoder's CLK pin
-//     CLK_state = digitalRead(CLK_PIN);
-
-//     // If the state of CLK is changed, then pulse occurred
-//     // React to only the rising edge (from LOW to HIGH) to avoid double count
-//     if (CLK_state != prev_CLK_state && CLK_state == HIGH)
-//     {
-//         // if the DT state is HIGH
-//         // The encoder is rotating in counter-clockwise direction => decrease the counter
-//         if (digitalRead(DT_PIN) == HIGH)
-//         {
-//             counter--;
-//             direction = DIRECTION_CCW;
-//         }
-//         else
-//         {
-//             // The encoder is rotating in clockwise direction => increase the counter
-//             counter++;
-//             direction = DIRECTION_CW;
-//         }
-
-//         Serial.print("Rotary Encoder:: direction: ");
-//         if (direction == DIRECTION_CW)
-//             Serial.print("Clockwise");
-//         else
-//             Serial.print("Counter-clockwise");
-
-//         Serial.print(" - count: ");
-//         Serial.println(counter);
-//     }
-
-//     // save last CLK state
-//     prev_CLK_state = CLK_state;
-
-//     if (button.isPressed())
-//     {
-//         Serial.println("The button is pressed");
-//     }
-// }
+     // save last CLK state
+     prev_CLK_state = CLK_state;
+}
